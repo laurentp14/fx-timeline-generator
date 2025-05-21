@@ -140,6 +140,10 @@ if image_mode:
         with col3:
             fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
             platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
+            confirm_platform = st.button("✅ Valider la plateforme")
+
+        if confirm_platform:
+            camera = st.selectbox("🎥 Mouvement caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves))
 
         prompt = f"{fx_main}"
         if fx_extra != "Aucun":
@@ -187,7 +191,12 @@ else:
                 location = st.selectbox("Lieu", locations, index=random.randint(0, len(locations)-1), key=f"loc_{i}")
 
             with col2:
-                camera = st.selectbox("Caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get("Runway", camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
+                
+                platform = st.selectbox("🎯 Plateforme IA", list(platforms.keys()), index=0, key=f"plat_{i}")
+                confirm_platform = st.button("✅ Valider la plateforme", key=f"btn_validate_{i}")
+                if confirm_platform:
+                    camera = st.selectbox("Caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
+
                 style = st.selectbox("Style", styles, index=random.randint(0, len(styles)-1), key=f"sty_{i}")
                 inspiration = st.selectbox("Référence", inspirations, index=random.randint(0, len(inspirations)-1), key=f"ref_{i}")
 
