@@ -98,6 +98,12 @@ camera_moves_by_platform = {
     ]
 }
 
+camera_moves = [
+    "static frame", "subtle handheld movement", "slow dolly zoom forward",
+    "drone shot circling the subject", "vertical tilt from bottom to top"
+]
+
+
 platforms = {
     "LumaLabs": "realistic and cinematic style with strong lighting and dynamic motion",
     "Runway": "hyper-detailed realism with soft transitions and natural textures",
