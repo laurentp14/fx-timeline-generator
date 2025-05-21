@@ -6,7 +6,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from io import BytesIO
 
-# Données FX et suggestions
+# Données
 combo_fx = {
     "explosion": "a giant explosion shattering the ground",
     "portal": "a glowing magical portal opening in the sky",
@@ -55,158 +55,67 @@ platforms = {
     "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
 }
 
-st.set_page_config(page_title="🎬 FX Timeline Generator", layout="wide")
-st.title("🎬 Générateur d'Effets Vidéo IA — FX Timeline + Image-to-Video")
+# Config de page
+st.set_page_config(page_title="🎬 FX Prompt Generator - Dual Mode", layout="wide")
+st.title("🎬 Générateur Vidéo IA : Texte vers Vidéo 🎞️ ou Image vers Vidéo 🖼️")
 
-num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
-use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions FX intelligentes", value=False)
+# Choix du mode
+st.sidebar.header("⚙️ Mode de génération")
+image_mode = st.sidebar.checkbox("🖼️ Activer le mode Image-to-Video", value=False)
 
-timeline = []
+if image_mode:
+    # Mode image-to-video
+    st.subheader("🖼️ Mode Image vers Vidéo (1 seule scène)")
+    uploaded_image = st.file_uploader("📸 Uploade une image :", type=["jpg", "png"])
+    motion_prompt = st.text_input("🎬 Décris l'animation souhaitée :", value="cinematic camera zoom with particle effects")
+    style = st.selectbox("🎨 Style visuel suggéré :", styles)
+    moteur = st.selectbox("🎥 Moteur IA cible :", list(platforms.keys()))
 
-for i in range(num_scenes):
-    with st.expander(f"🎞️ Scène {i + 1}"):
-        col1, col2 = st.columns(2)
+    if uploaded_image:
+        st.image(uploaded_image, caption="Image source pour animation", use_column_width=True)
+        st.markdown("### 🎞️ Prompt d'animation proposé :")
+        st.code(f"Prompt : {motion_prompt}\nStyle : {style}\nMoteur : {moteur}")
 
-        with col1:
-            if use_smart_combo:
-                fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
-                suggested = combo_suggestions.get(fx1, [])
-                fx2 = st.selectbox(f"Effet complémentaire suggéré", ["Aucun"] + suggested, key=f"fx2_{i}")
-                fx_list = [combo_fx[fx1]]
-                if fx2 != "Aucun" and fx2 in combo_fx:
-                    fx_list.append(combo_fx[fx2])
-            else:
-                fx_keys = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()),
-                                         default=random.sample(list(combo_fx.keys()), 2), key=f"fx_{i}")
-                fx_list = [combo_fx[k] for k in fx_keys if k in combo_fx]
+else:
+    # Mode texte-to-video multi-scène
+    num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
+    use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions FX intelligentes", value=False)
 
-            location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
+    timeline = []
 
-        with col2:
-            camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
-            style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
-            inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
+    for i in range(num_scenes):
+        with st.expander(f"🎞️ Scène {i + 1}"):
+            col1, col2 = st.columns(2)
 
-        fx_desc = " and ".join(fx_list) if fx_list else "a mysterious phenomenon occurs"
-        base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
-        timeline.append((f"Scène {i + 1}", base_prompt))
+            with col1:
+                if use_smart_combo:
+                    fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
+                    suggested = combo_suggestions.get(fx1, [])
+                    fx2 = st.selectbox(f"Effet complémentaire suggéré", ["Aucun"] + suggested, key=f"fx2_{i}")
+                    fx_list = [combo_fx[fx1]]
+                    if fx2 != "Aucun" and fx2 in combo_fx:
+                        fx_list.append(combo_fx[fx2])
+                else:
+                    fx_keys = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()),
+                                             default=random.sample(list(combo_fx.keys()), 2), key=f"fx_{i}")
+                    fx_list = [combo_fx[k] for k in fx_keys if k in combo_fx]
 
-        # Partie image-to-video
-        st.markdown("🎞️ **Image-to-Video (optionnel)**")
-        uploaded_image = st.file_uploader("📸 Uploade une image pour cette scène :", type=["jpg", "png"], key=f"img_{i}")
-        motion_prompt = st.text_input("🎬 Décris l'animation souhaitée à partir de l’image :", value="cinematic zoom-in with particle effects", key=f"anim_{i}")
+                location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
 
-        if uploaded_image:
-            st.image(uploaded_image, caption="Image source pour animation")
-            st.markdown(f"*Suggestion de prompt animation (à copier dans Pika, Runway, Pixverse...) :*")
-            st.code(f"Prompt : {motion_prompt}\nImage : [image jointe]")
+            with col2:
+                camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
+                style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
+                inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
 
-# Affichage des scènes
-st.subheader("📜 Timeline des Scènes Générées")
-for scene_title, base_prompt in timeline:
-    st.markdown(f"## 🎬 {scene_title}")
-    st.code(base_prompt)
-    for platform, desc in platforms.items():
-        full_prompt = f"{base_prompt} Adapted for {platform}: {desc}."
-        st.markdown(f"**🔹 {platform}**")
-        st.code(full_prompt)
+            fx_desc = " and ".join(fx_list) if fx_list else "a mysterious phenomenon occurs"
+            base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
+            timeline.append((f"Scène {i + 1}", base_prompt))
 
-# Export Markdown
-if st.button("📝 Exporter la timeline en Markdown (.md)"):
-    md_lines = ["# 🎬 FX Video Prompt Timeline", ""]
+    st.subheader("📜 Timeline des Scènes Générées")
     for scene_title, base_prompt in timeline:
-        md_lines.append(f"## {scene_title}")
-        md_lines.append("")
-        md_lines.append("**Prompt principal :**")
-        md_lines.append("")
-        md_lines.append(f"> {base_prompt}")
-        md_lines.append("")
+        st.markdown(f"## 🎬 {scene_title}")
+        st.code(base_prompt)
         for platform, desc in platforms.items():
             full_prompt = f"{base_prompt} Adapted for {platform}: {desc}."
-            md_lines.append(f"**🔹 {platform}**")
-            md_lines.append("")
-            md_lines.append(f"> {full_prompt}")
-            md_lines.append("")
-
-    markdown_text = "\n".join(md_lines)
-    file_path = "fx_timeline.md"
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(markdown_text)
-
-    with open(file_path, "rb") as f:
-        st.download_button(
-            label="📥 Télécharger le fichier Markdown",
-            data=f,
-            file_name="fx_timeline.md",
-            mime="text/markdown"
-        )
-
-    os.remove(file_path)
-
-# Export PDF
-def split_text(text, max_length):
-    words = text.split()
-    lines = []
-    line = ""
-    for word in words:
-        if len(line) + len(word) + 1 <= max_length:
-            line += word + " "
-        else:
-            lines.append(line.strip())
-            line = word + " "
-    if line:
-        lines.append(line.strip())
-    return lines
-
-def create_pdf(timeline):
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    y = height - 40
-
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(40, y, "🎬 FX Video Prompt Timeline")
-    y -= 30
-
-    for scene_title, base_prompt in timeline:
-        if y < 120:
-            c.showPage()
-            c.setFont("Helvetica", 12)
-            y = height - 40
-
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(40, y, scene_title)
-        y -= 20
-
-        c.setFont("Helvetica", 12)
-        c.drawString(40, y, "Prompt principal :")
-        y -= 16
-        for line in split_text(base_prompt, 90):
-            c.drawString(50, y, line)
-            y -= 14
-
-        for platform, desc in platforms.items():
-            full_prompt = f"{base_prompt} Adapted for {platform}: {desc}."
-            y -= 10
-            c.setFont("Helvetica-Bold", 12)
-            c.drawString(40, y, f"{platform}")
-            y -= 16
-            c.setFont("Helvetica", 11)
-            for line in split_text(full_prompt, 90):
-                c.drawString(50, y, line)
-                y -= 14
-
-            y -= 8
-
-    c.save()
-    buffer.seek(0)
-    return buffer
-
-if st.button("📄 Exporter la timeline en PDF"):
-    pdf_file = create_pdf(timeline)
-    st.download_button(
-        label="📥 Télécharger le PDF",
-        data=pdf_file,
-        file_name="fx_timeline.pdf",
-        mime="application/pdf"
-    )
+            st.markdown(f"**🔹 {platform}**")
+            st.code(full_prompt)
