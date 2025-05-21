@@ -56,12 +56,48 @@ platforms = {
     "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
 }
 
+
+camera_moves_by_platform = {
+    "LumaLabs": [
+        "Pull Out + Tilt Down", "Orbit Right + Handheld", "Elevator Doors + Dolly Zoom",
+        "Aerial Drone", "Zoom In", "Tiny Planet"
+    ],
+    "Runway": [
+        "Horizontal (X-Axis Movement)", "Vertical (Y-Axis Movement)", "Pan", "Tilt", "Zoom", "Roll"
+    ],
+    "Minimax": [
+        "Dolly In/Out", "Pan", "Tilt", "Handheld", "Tracking Shot", "Rack Focus"
+    ],
+    "Pika": [
+        "Zoom", "Pan (up/down/left/right)", "Rotate"
+    ],
+    "Vidu Q1": [
+        "Pedestal Shot", "Tilt Shot", "Dolly Shot", "Arc Shot"
+    ],
+    "Pixverse 4.5": [
+        "Dynamic Pan", "Zoom", "Push-Pull Lenses", "Tracking Shots", "Dramatic Pans"
+    ],
+    "Kling 1.6": [
+        "Horizontal (left/right)", "Vertical (up/down)", "Zoom", "Pan", "Tilt", "Roll",
+        "Move Left and Zoom In", "Move Right and Zoom In", "Move Forward and Zoom Up", "Move Down and Zoom Out"
+    ]
+}
+
+camera_moves = [
+    "static frame", "subtle handheld movement", "slow dolly zoom forward",
+    "drone shot circling the subject", "vertical tilt from bottom to top"
+]
+
+
+
+
 st.set_page_config(page_title="🎬 FX Prompt Timeline Generator", layout="wide")
 st.title("🎬 Générateur de Timeline d’Effets Spéciaux Vidéo IA")
 
 # Options dans la sidebar
 num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
 use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions intelligentes de FX", value=False)
+camera_all_toggle = st.sidebar.checkbox("🔄 Afficher tous les mouvements de caméra")
 
 timeline = []
 
@@ -85,7 +121,8 @@ for i in range(num_scenes):
             location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
 
         with col2:
-            camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
+            platform = st.selectbox(f"Plateforme IA", list(platforms.keys()), index=0, key=f"plat_{i}")
+            camera = st.selectbox(f"Mouvement caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
             style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
             inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
 
