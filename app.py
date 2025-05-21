@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import streamlit as st
 import random
@@ -117,8 +118,8 @@ camera_moves = [
     "vertical tilt from bottom to top"
 ]
 
-st.set_page_config(page_title="🎬 FX Generator Tool", layout="wide")
-st.title("🎬 Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
+st.set_page_config(page_title=" FX Generator Tool", layout="wide")
+st.title(" Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
 
 st.sidebar.header("⚙️ Mode de génération")
 image_mode = st.sidebar.checkbox("🖼️ Mode Image-to-Video", value=False)
@@ -129,7 +130,7 @@ if image_mode:
         st.image(uploaded_image, caption="Image source", width=350)
         st.divider()
 
-        st.markdown("### 🎬 Paramètres d'animation")
+        st.markdown("###  Paramètres d'animation")
         col1, col2, col3 = st.columns(3)
         with col1:
             style = st.selectbox("🎨 Style visuel", styles)
@@ -138,8 +139,8 @@ if image_mode:
             camera = st.selectbox("🎥 Mouvement caméra", camera_moves)
             fx_main = st.selectbox("✨ Effet principal", fx_options)
         with col3:
-            fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
-            platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
+            fx_extra = st.selectbox(" Effet secondaire", ["Aucun"] + fx_options)
+            platform = st.selectbox(" Moteur cible", list(platforms.keys()))
 
         prompt = f"{fx_main}"
         if fx_extra != "Aucun":
@@ -148,9 +149,9 @@ if image_mode:
         full_prompt = f"{prompt}, using a {camera}, {style} style, {inspiration}. {desc}"
 
         st.markdown("### 📝 Prompt généré :")
-        st.text_area("📋 Sélectionnez et copiez ce prompt :", full_prompt, height=120)
+        st.text_area(" Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-        summary = f"""🎬 Image-to-Video Scene
+        summary = f"""Image-to-Video Scene
 Image: {uploaded_image.name}
 FX: {prompt}
 Camera: {camera}
@@ -277,8 +278,8 @@ camera_moves = [
     "vertical tilt from bottom to top"
 ]
 
-st.set_page_config(page_title="🎬 FX Generator Tool", layout="wide")
-st.title("🎬 Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
+st.set_page_config(page_title=" FX Generator Tool", layout="wide")
+st.title(" Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
 
 st.sidebar.header("⚙️ Mode de génération")
 image_mode = st.sidebar.checkbox("🖼️ Mode Image-to-Video", value=False)
@@ -289,7 +290,7 @@ if image_mode:
         st.image(uploaded_image, caption="Image source", width=350)
         st.divider()
 
-        st.markdown("### 🎬 Paramètres d'animation")
+        st.markdown("###  Paramètres d'animation")
         col1, col2, col3 = st.columns(3)
         with col1:
             style = st.selectbox("🎨 Style visuel", styles)
@@ -298,8 +299,8 @@ if image_mode:
             camera = st.selectbox("🎥 Mouvement caméra", camera_moves)
             fx_main = st.selectbox("✨ Effet principal", fx_options)
         with col3:
-            fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
-            platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
+            fx_extra = st.selectbox(" Effet secondaire", ["Aucun"] + fx_options)
+            platform = st.selectbox(" Moteur cible", list(platforms.keys()))
 
         prompt = f"{fx_main}"
         if fx_extra != "Aucun":
@@ -308,9 +309,9 @@ if image_mode:
         full_prompt = f"{prompt}, using a {camera}, {style} style, {inspiration}. {desc}"
 
         st.markdown("### 📝 Prompt généré :")
-        st.text_area("📋 Sélectionnez et copiez ce prompt :", full_prompt, height=120)
+        st.text_area(" Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-        summary = f"""🎬 Image-to-Video Scene
+        summary = f"""Image-to-Video Scene
 Image: {uploaded_image.name}
 FX: {prompt}
 Camera: {camera}
@@ -321,7 +322,7 @@ Platform: {platform} – {desc}
 Prompt:
 {full_prompt}
 """
-        st.download_button("📥 Télécharger le résumé (.txt)", summary.encode("utf-8"), "image_to_video_summary.txt")
+        st.download_button(" Télécharger le résumé (.txt)", summary.encode("utf-8"), "image_to_video_summary.txt")
     else:
         st.info("🖼️ Veuillez uploader une image.")
 else:
@@ -355,8 +356,8 @@ camera_all_toggle = st.sidebar.checkbox("🔄 Afficher tous les mouvements de ca
             if "camera" not in locals():
     camera = "a generic camera motion"
 base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
-            st.markdown("🎯 Prompt principal :")
-            st.text_area("📋 Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
+            st.markdown(" Prompt principal :")
+            st.text_area(" Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
 
             st.markdown("📤 Export par moteur IA :")
             for plat, desc in platforms.items():
@@ -373,7 +374,7 @@ base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {in
         for plat, desc in platforms.items():
             output += f"**{plat}**\n{base} {desc}\n\n"
 
-    st.download_button("📥 Télécharger toute la timeline (.txt)", output.encode("utf-8"), "fx_timeline.txt")
+    st.download_button(" Télécharger toute la timeline (.txt)", output.encode("utf-8"), "fx_timeline.txt")
                     fx_list = [combo_fx[fx1]]
                     if fx2 != "Aucun" and fx2 in combo_fx:
                         fx_list.append(combo_fx[fx2])
@@ -391,8 +392,8 @@ base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {in
             if "camera" not in locals():
     camera = "a generic camera motion"
 base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
-            st.markdown("🎯 Prompt principal :")
-            st.text_area("📋 Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
+            st.markdown(" Prompt principal :")
+            st.text_area(" Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
 
             st.markdown("📤 Export par moteur IA :")
             for plat, desc in platforms.items():
@@ -409,4 +410,4 @@ base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {in
         for plat, desc in platforms.items():
             output += f"**{plat}**\n{base} {desc}\n\n"
 
-    st.download_button("📥 Télécharger toute la timeline (.txt)", output.encode("utf-8"), "fx_timeline.txt")
+    st.download_button(" Télécharger toute la timeline (.txt)", output.encode("utf-8"), "fx_timeline.txt")
