@@ -22,9 +22,14 @@ combo_suggestions = {
     "disintegration": ["explosion", "transformation"]
 }
 styles = ["cinematic", "dreamlike", "hyper-realistic", "stylized anime", "dark sci-fi"]
+
+
 camera_moves = [
-    "static frame", "subtle handheld movement", "slow dolly zoom forward",
-    "drone shot circling the subject", "vertical tilt from bottom to top"
+    "static frame",
+    "subtle handheld movement",
+    "slow dolly zoom forward",
+    "drone shot circling the subject",
+    "vertical tilt from bottom to top"
 ]
 fx_options = [
     "particles floating around", "light rays breaking through clouds",
@@ -98,10 +103,6 @@ camera_moves_by_platform = {
     ]
 }
 
-camera_moves = [
-    "static frame", "subtle handheld movement", "slow dolly zoom forward",
-    "drone shot circling the subject", "vertical tilt from bottom to top"
-]
 
 
 platforms = {
