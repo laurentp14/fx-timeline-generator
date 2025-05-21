@@ -151,14 +151,6 @@ if image_mode:
         st.markdown("### 📝 Prompt généré :")
         st.text_area(" Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-        summary = f"""Image-to-Video Scene
-Image: {uploaded_image.name}
-FX: {prompt}
-Camera: {camera}
-Style: {style}
-Inspiration: {inspiration}
-Platform: {platform} - {desc}
-"""
 
 import streamlit as st
 import random
@@ -311,14 +303,6 @@ if image_mode:
         st.markdown("### 📝 Prompt généré :")
         st.text_area(" Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-        summary = f"""Image-to-Video Scene
-Image: {uploaded_image.name}
-FX: {prompt}
-Camera: {camera}
-Style: {style}
-Inspiration: {inspiration}
-Platform: {platform} - {desc}
-"""
 Prompt:
 {full_prompt}
 """
