@@ -35,13 +35,27 @@ locations = [
 styles = ["cinematic", "dreamlike", "hyper-realistic", "stylized anime", "dark sci-fi"]
 
 camera_moves = [
-    "with a drone shot circling the scene", "with a slow-motion dolly zoom",
-    "with a handheld shaking camera", "in a smooth panoramic shot"
+    "static frame",
+    "subtle handheld movement",
+    "slow dolly zoom forward",
+    "drone shot circling the subject",
+    "vertical tilt from bottom to top"
+]
+
+fx_options = [
+    "particles floating around",
+    "light rays breaking through clouds",
+    "portal opening behind the subject",
+    "energy surging from the ground",
+    "environment slowly collapsing",
+    "scene gradually shifting to another dimension"
 ]
 
 inspirations = [
-    "like in Inception", "inspired by Blade Runner 2049",
-    "with the atmosphere of Interstellar", "like a Marvel final battle",
+    "like in Inception",
+    "inspired by Blade Runner 2049",
+    "with the atmosphere of Interstellar",
+    "like a Marvel final battle",
     "reminiscent of The Witcher"
 ]
 
@@ -67,15 +81,38 @@ if image_mode:
     # Mode image-to-video
     st.subheader("🖼️ Mode Image vers Vidéo (1 seule scène)")
     uploaded_image = st.file_uploader("📸 Uploade une image :", type=["jpg", "png"])
-    motion_prompt = st.text_input("🎬 Décris l'animation souhaitée :", value="cinematic camera zoom with particle effects")
-    style = st.selectbox("🎨 Style visuel suggéré :", styles)
-    moteur = st.selectbox("🎥 Moteur IA cible :", list(platforms.keys()))
 
     if uploaded_image:
-        st.image(uploaded_image, caption="Image source pour animation", use_container_width=True)
-        st.markdown("### 🎞️ Prompt d'animation proposé :")
-        st.code(f"Prompt : {motion_prompt}\nStyle : {style}\nMoteur : {moteur}")
+        st.image(uploaded_image, caption="Image source", width=350)
+        st.divider()
 
+        st.markdown("### 🎬 Paramètres d'animation")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            style = st.selectbox("🎨 Style visuel", styles)
+            inspiration = st.selectbox("🎞️ Référence cinéma", inspirations)
+
+        with col2:
+            camera = st.selectbox("🎥 Mouvement de caméra", camera_moves)
+            fx_main = st.selectbox("✨ Effet principal", fx_options)
+
+        with col3:
+            fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
+            platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
+
+        # Prompt final
+        prompt = f"{fx_main}"
+        if fx_extra != "Aucun":
+            prompt += f" and {fx_extra}"
+
+        full_prompt = f"{prompt}, using a {camera}, {style} style, {inspiration}. Adapted for {platform}."
+
+        st.markdown("### 📝 Prompt d'animation généré :")
+        st.code(full_prompt)
+    else:
+        st.info("🖼️ Veuillez uploader une image pour commencer.")
 else:
     # Mode texte-to-video multi-scène
     num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
