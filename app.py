@@ -85,23 +85,23 @@ else:
     timeline = []
 
 # Construction manuelle
-if not "auto_timeline" in st.session_state:
+if "auto_timeline" not in st.session_state:
     for i in range(num_scenes):
         with st.expander(f"🎞️ Scène {i + 1} : personnaliser ou générer aléatoirement"):
             col1, col2 = st.columns(2)
 
             with col1:
-                fx_keys = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()), default=random.sample(list(combo_fx.keys()), 2))
-                location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1))
+                fx_keys = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()),
+                                         default=random.sample(list(combo_fx.keys()), 2), key=f"fx_{i}")
+                location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
 
             with col2:
-                camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1))
-                style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1))
-                inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1))
+                camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
+                style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
+                inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
 
             fx_parts = [combo_fx[k] for k in fx_keys if k in combo_fx]
             fx_desc = " and ".join(fx_parts) if fx_parts else "a mysterious phenomenon occurs"
-
             base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
             timeline.append((f"Scène {i + 1}", base_prompt))
 
