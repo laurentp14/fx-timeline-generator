@@ -158,7 +158,7 @@ Camera: {camera}
 Style: {style}
 Inspiration: {inspiration}
 Platform: {platform} - {desc}
-
+"""
 
 import streamlit as st
 import random
@@ -318,7 +318,7 @@ Camera: {camera}
 Style: {style}
 Inspiration: {inspiration}
 Platform: {platform} - {desc}
-
+"""
 Prompt:
 {full_prompt}
 """
