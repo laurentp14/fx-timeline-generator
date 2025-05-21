@@ -22,14 +22,9 @@ combo_suggestions = {
     "disintegration": ["explosion", "transformation"]
 }
 styles = ["cinematic", "dreamlike", "hyper-realistic", "stylized anime", "dark sci-fi"]
-
-
 camera_moves = [
-    "static frame",
-    "subtle handheld movement",
-    "slow dolly zoom forward",
-    "drone shot circling the subject",
-    "vertical tilt from bottom to top"
+    "static frame", "subtle handheld movement", "slow dolly zoom forward",
+    "drone shot circling the subject", "vertical tilt from bottom to top"
 ]
 fx_options = [
     "particles floating around", "light rays breaking through clouds",
@@ -45,6 +40,17 @@ inspirations = [
     "with the atmosphere of Interstellar", "like a Marvel final battle",
     "reminiscent of The Witcher"
 ]
+platforms = {
+    "LumaLabs": "realistic and cinematic style with strong lighting and dynamic motion",
+    "Runway": "hyper-detailed realism with soft transitions and natural textures",
+    "Minimax": "stylized and expressive animation with fluid transitions and strong mood",
+    "Pika": "bold and punchy visuals with sharp VFX and fast action flow",
+    "Vidu Q1": "cinematic storytelling visuals with fluid camera movement and rich transitions",
+    "Pixverse 4.5": "animated, colorful and fast-paced style with energetic motion effects",
+    "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
+}
+
+
 
 camera_moves_by_platform = {
     "LumaLabs": [
@@ -103,25 +109,19 @@ camera_moves_by_platform = {
     ]
 }
 
-
-
-platforms = {
-    "LumaLabs": "realistic and cinematic style with strong lighting and dynamic motion",
-    "Runway": "hyper-detailed realism with soft transitions and natural textures",
-    "Minimax": "stylized and expressive animation with fluid transitions and strong mood",
-    "Pika": "bold and punchy visuals with sharp VFX and fast action flow",
-    "Vidu Q1": "cinematic storytelling visuals with fluid camera movement and rich transitions",
-    "Pixverse 4.5": "animated, colorful and fast-paced style with energetic motion effects",
-    "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
-}
+camera_moves = [
+    "static frame",
+    "subtle handheld movement",
+    "slow dolly zoom forward",
+    "drone shot circling the subject",
+    "vertical tilt from bottom to top"
+]
 
 st.set_page_config(page_title="🎬 FX Generator Tool", layout="wide")
 st.title("🎬 Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
 
 st.sidebar.header("⚙️ Mode de génération")
 image_mode = st.sidebar.checkbox("🖼️ Mode Image-to-Video", value=False)
-camera_all_toggle = st.sidebar.checkbox("🔄 Afficher tous les mouvements de caméra disponibles")
-
 
 if image_mode:
     uploaded_image = st.file_uploader("📸 Uploade une image :", type=["jpg", "png"])
@@ -140,10 +140,6 @@ if image_mode:
         with col3:
             fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
             platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
-            confirm_platform = st.button("✅ Valider la plateforme")
-
-        if confirm_platform:
-            camera = st.selectbox("🎥 Mouvement caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves))
 
         prompt = f"{fx_main}"
         if fx_extra != "Aucun":
@@ -171,6 +167,7 @@ Prompt:
 else:
     num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
     use_smart_combo = st.sidebar.checkbox("🧠 FX combo intelligent", value=False)
+camera_all_toggle = st.sidebar.checkbox("🔄 Afficher tous les mouvements de caméra")
     timeline = []
 
     for i in range(num_scenes):
@@ -191,20 +188,13 @@ else:
                 location = st.selectbox("Lieu", locations, index=random.randint(0, len(locations)-1), key=f"loc_{i}")
 
             with col2:
-                
-                platform = st.selectbox("🎯 Plateforme IA", list(platforms.keys()), index=0, key=f"plat_{i}")
-                confirm_platform = st.button("✅ Valider la plateforme", key=f"btn_validate_{i}")
-                if confirm_platform:
-                    camera = st.selectbox("Caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
-
+                camera = st.selectbox("Caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
                 style = st.selectbox("Style", styles, index=random.randint(0, len(styles)-1), key=f"sty_{i}")
                 inspiration = st.selectbox("Référence", inspirations, index=random.randint(0, len(inspirations)-1), key=f"ref_{i}")
 
-
-                if 'camera' not in locals():
-                    camera = "a generic camera motion"
-
-            base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
+            if "camera" not in locals():
+    camera = "a generic camera motion"
+base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
             st.markdown("🎯 Prompt principal :")
             st.text_area("📋 Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
 
