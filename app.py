@@ -200,6 +200,10 @@ else:
                 style = st.selectbox("Style", styles, index=random.randint(0, len(styles)-1), key=f"sty_{i}")
                 inspiration = st.selectbox("Référence", inspirations, index=random.randint(0, len(inspirations)-1), key=f"ref_{i}")
 
+
+                if 'camera' not in locals():
+                    camera = "a generic camera motion"
+
             base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
             st.markdown("🎯 Prompt principal :")
             st.text_area("📋 Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
