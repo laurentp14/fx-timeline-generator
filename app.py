@@ -17,6 +17,17 @@ combo_fx = {
     "disintegration": "everything slowly disintegrating into particles"
 }
 
+# Suggérer des combinaisons cohérentes
+combo_suggestions = {
+    "explosion": ["collapse", "disintegration"],
+    "portal": ["storm", "transformation"],
+    "storm": ["lava", "collapse"],
+    "transformation": ["portal", "disintegration"],
+    "collapse": ["explosion", "storm"],
+    "lava": ["storm", "collapse"],
+    "disintegration": ["explosion", "transformation"]
+}
+
 locations = [
     "in a medieval castle", "on a floating island", "in a neon-lit cyberpunk city",
     "inside an ancient forest", "in an underwater city"
@@ -55,60 +66,38 @@ story_roles = [
 
 st.set_page_config(page_title="🎬 Timeline FX Generator", layout="wide")
 st.title("🎬 Générateur de Timeline d’Effets Spéciaux Vidéo IA")
-st.markdown("Crée une **suite de scènes FX** avec transitions, effets et ambiance. Idéal pour vidéos narratives multi-étapes.")
+st.markdown("Crée une **suite de scènes FX** avec transitions, effets et ambiance. Version avec suggestions intelligentes de FX combinés.")
 
 # Nombre de scènes
 num_scenes = st.sidebar.slider("📽️ Nombre de scènes", min_value=1, max_value=5, value=3)
 
-# Génération automatique d'un arc narratif
-st.sidebar.markdown("---")
-if st.sidebar.button("🎬 Générer un arc narratif automatique"):
-    num_scenes = min(len(story_roles), num_scenes)
-    timeline = []
+timeline = []
 
-    for i in range(num_scenes):
-        role = story_roles[i]
+# Construction manuelle avec suggestions intelligentes
+for i in range(num_scenes):
+    with st.expander(f"🎞️ Scène {i + 1} : personnaliser avec suggestions FX intelligentes"):
+        col1, col2 = st.columns(2)
 
-        fx = random.sample(list(combo_fx.values()), k=random.choice([1, 2]))
-        location = random.choice(locations)
-        camera = random.choice(camera_moves)
-        style = random.choice(styles)
-        inspiration = random.choice(inspirations)
+        with col1:
+            fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
+            suggested = combo_suggestions.get(fx1, [])
+            fx2 = st.selectbox(f"Effet complémentaire suggéré", ["Aucun"] + suggested, key=f"fx2_{i}")
+            fx_list = [combo_fx[fx1]]
+            if fx2 != "Aucun" and fx2 in combo_fx:
+                fx_list.append(combo_fx[fx2])
 
-        scene_title = f"Scène {i + 1} – {role}"
-        fx_desc = " and ".join(fx)
+            location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
+
+        with col2:
+            camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
+            style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
+            inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
+
+        fx_desc = " and ".join(fx_list)
         base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
-        timeline.append((scene_title, base_prompt))
+        timeline.append((f"Scène {i + 1}", base_prompt))
 
-    st.session_state["auto_timeline"] = timeline
-else:
-    timeline = []
-
-# Construction manuelle
-if "auto_timeline" not in st.session_state:
-    for i in range(num_scenes):
-        with st.expander(f"🎞️ Scène {i + 1} : personnaliser ou générer aléatoirement"):
-            col1, col2 = st.columns(2)
-
-            with col1:
-                fx_keys = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()),
-                                         default=random.sample(list(combo_fx.keys()), 2), key=f"fx_{i}")
-                location = st.selectbox(f"Lieu", locations, index=random.randint(0, len(locations)-1), key=f"location_{i}")
-
-            with col2:
-                camera = st.selectbox(f"Mouvement caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
-                style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
-                inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
-
-            fx_parts = [combo_fx[k] for k in fx_keys if k in combo_fx]
-            fx_desc = " and ".join(fx_parts) if fx_parts else "a mysterious phenomenon occurs"
-            base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
-            timeline.append((f"Scène {i + 1}", base_prompt))
-
-# Affichage des scènes
-if "auto_timeline" in st.session_state:
-    timeline = st.session_state["auto_timeline"]
-
+# Affichage
 st.subheader("📜 Timeline des Scènes Générées")
 for scene_title, base_prompt in timeline:
     st.markdown(f"## 🎬 {scene_title}")
