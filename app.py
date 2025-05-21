@@ -1,9 +1,8 @@
 
 import streamlit as st
 import random
-from io import BytesIO
 
-# Données communes
+# Données
 combo_fx = {
     "explosion": "a giant explosion shattering the ground",
     "portal": "a glowing magical portal opening in the sky",
@@ -13,7 +12,6 @@ combo_fx = {
     "lava": "lava rising rapidly from the earth",
     "disintegration": "everything slowly disintegrating into particles"
 }
-
 combo_suggestions = {
     "explosion": ["collapse", "disintegration"],
     "portal": ["storm", "transformation"],
@@ -23,32 +21,23 @@ combo_suggestions = {
     "lava": ["storm", "collapse"],
     "disintegration": ["explosion", "transformation"]
 }
-
 styles = ["cinematic", "dreamlike", "hyper-realistic", "stylized anime", "dark sci-fi"]
 camera_moves = [
-    "static frame",
-    "subtle handheld movement",
-    "slow dolly zoom forward",
-    "drone shot circling the subject",
-    "vertical tilt from bottom to top"
+    "static frame", "subtle handheld movement", "slow dolly zoom forward",
+    "drone shot circling the subject", "vertical tilt from bottom to top"
 ]
 fx_options = [
-    "particles floating around",
-    "light rays breaking through clouds",
-    "portal opening behind the subject",
-    "energy surging from the ground",
-    "environment slowly collapsing",
-    "scene gradually shifting to another dimension"
+    "particles floating around", "light rays breaking through clouds",
+    "portal opening behind the subject", "energy surging from the ground",
+    "environment slowly collapsing", "scene gradually shifting to another dimension"
 ]
 locations = [
     "in a medieval castle", "on a floating island", "in a neon-lit cyberpunk city",
     "inside an ancient forest", "in an underwater city"
 ]
 inspirations = [
-    "like in Inception",
-    "inspired by Blade Runner 2049",
-    "with the atmosphere of Interstellar",
-    "like a Marvel final battle",
+    "like in Inception", "inspired by Blade Runner 2049",
+    "with the atmosphere of Interstellar", "like a Marvel final battle",
     "reminiscent of The Witcher"
 ]
 platforms = {
@@ -61,32 +50,26 @@ platforms = {
     "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
 }
 
-# Setup
 st.set_page_config(page_title="🎬 FX Generator Tool", layout="wide")
 st.title("🎬 Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vidéo")
 
-# Choix du mode
 st.sidebar.header("⚙️ Mode de génération")
 image_mode = st.sidebar.checkbox("🖼️ Mode Image-to-Video", value=False)
 
 if image_mode:
     uploaded_image = st.file_uploader("📸 Uploade une image :", type=["jpg", "png"])
-
     if uploaded_image:
         st.image(uploaded_image, caption="Image source", width=350)
         st.divider()
 
         st.markdown("### 🎬 Paramètres d'animation")
         col1, col2, col3 = st.columns(3)
-
         with col1:
             style = st.selectbox("🎨 Style visuel", styles)
             inspiration = st.selectbox("🎞️ Référence cinéma", inspirations)
-
         with col2:
             camera = st.selectbox("🎥 Mouvement caméra", camera_moves)
             fx_main = st.selectbox("✨ Effet principal", fx_options)
-
         with col3:
             fx_extra = st.selectbox("🔮 Effet secondaire", ["Aucun"] + fx_options)
             platform = st.selectbox("🎯 Moteur cible", list(platforms.keys()))
@@ -98,10 +81,8 @@ if image_mode:
         full_prompt = f"{prompt}, using a {camera}, {style} style, {inspiration}. {desc}"
 
         st.markdown("### 📝 Prompt généré :")
-        st.code(full_prompt)
-        st.button("📋 Copier le prompt (sélection manuelle si nécessaire)")
+        st.text_area("📋 Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-        # Export
         summary = f"""🎬 Image-to-Video Scene
 Image: {uploaded_image.name}
 FX: {prompt}
@@ -136,7 +117,6 @@ else:
                     fx_keys = st.multiselect("FX", list(combo_fx.keys()),
                                              default=random.sample(list(combo_fx.keys()), 2), key=f"fx_{i}")
                     fx_list = [combo_fx[k] for k in fx_keys if k in combo_fx]
-
                 location = st.selectbox("Lieu", locations, index=random.randint(0, len(locations)-1), key=f"loc_{i}")
 
             with col2:
@@ -146,14 +126,14 @@ else:
 
             base_prompt = f"{' and '.join(fx_list)} {location}, {camera}, {style} style, {inspiration}."
             st.markdown("🎯 Prompt principal :")
-            st.code(base_prompt)
-            st.button("📋 Copier ce prompt", key=f"btn_copy_{i}")
+            st.text_area("📋 Sélectionnez et copiez ce prompt :", base_prompt, height=100, key=f"ta_{i}")
 
             st.markdown("📤 Export par moteur IA :")
             for plat, desc in platforms.items():
                 full = f"{base_prompt} {desc}"
                 st.markdown(f"**🔹 {plat}**")
-                st.code(full)
+                st.text_area("Prompt exporté :", full, height=100, key=f"full_{i}_{plat}")
+
             timeline.append((f"Scene {i+1}", base_prompt))
 
     # Export global
