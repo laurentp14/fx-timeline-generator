@@ -40,6 +40,64 @@ inspirations = [
     "with the atmosphere of Interstellar", "like a Marvel final battle",
     "reminiscent of The Witcher"
 ]
+
+camera_moves_by_platform = {
+    "LumaLabs": [
+        "Pull Out + Tilt Down",
+        "Orbit Right + Handheld",
+        "Elevator Doors + Dolly Zoom",
+        "Aerial Drone",
+        "Zoom In",
+        "Tiny Planet"
+    ],
+    "Runway": [
+        "Horizontal (X-Axis Movement)",
+        "Vertical (Y-Axis Movement)",
+        "Pan",
+        "Tilt",
+        "Zoom",
+        "Roll"
+    ],
+    "Minimax": [
+        "Dolly In/Out",
+        "Pan",
+        "Tilt",
+        "Handheld",
+        "Tracking Shot",
+        "Rack Focus"
+    ],
+    "Pika": [
+        "Zoom",
+        "Pan (up/down/left/right)",
+        "Rotate"
+    ],
+    "Vidu Q1": [
+        "Pedestal Shot",
+        "Tilt Shot",
+        "Dolly Shot",
+        "Arc Shot"
+    ],
+    "Pixverse 4.5": [
+        "Dynamic Pan",
+        "Zoom",
+        "Push-Pull Lenses",
+        "Tracking Shots",
+        "Dramatic Pans"
+    ],
+    "Kling 1.6": [
+        "Horizontal (left/right)",
+        "Vertical (up/down)",
+        "Zoom",
+        "Pan",
+        "Tilt",
+        "Roll",
+        "Move Left and Zoom In",
+        "Move Right and Zoom In",
+        "Move Forward and Zoom Up",
+        "Move Down and Zoom Out"
+    ]
+}
+
 platforms = {
     "LumaLabs": "realistic and cinematic style with strong lighting and dynamic motion",
     "Runway": "hyper-detailed realism with soft transitions and natural textures",
@@ -55,6 +113,8 @@ st.title("🎬 Générateur Vidéo IA : Texte 🎞️ ou Image 🖼️ vers Vid�
 
 st.sidebar.header("⚙️ Mode de génération")
 image_mode = st.sidebar.checkbox("🖼️ Mode Image-to-Video", value=False)
+camera_all_toggle = st.sidebar.checkbox("🔄 Afficher tous les mouvements de caméra disponibles")
+
 
 if image_mode:
     uploaded_image = st.file_uploader("📸 Uploade une image :", type=["jpg", "png"])
@@ -120,7 +180,7 @@ else:
                 location = st.selectbox("Lieu", locations, index=random.randint(0, len(locations)-1), key=f"loc_{i}")
 
             with col2:
-                camera = st.selectbox("Caméra", camera_moves, index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
+                camera = st.selectbox("Caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"cam_{i}")
                 style = st.selectbox("Style", styles, index=random.randint(0, len(styles)-1), key=f"sty_{i}")
                 inspiration = st.selectbox("Référence", inspirations, index=random.randint(0, len(inspirations)-1), key=f"ref_{i}")
 
