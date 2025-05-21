@@ -303,9 +303,6 @@ if image_mode:
         st.markdown("### 📝 Prompt généré :")
         st.text_area(" Sélectionnez et copiez ce prompt :", full_prompt, height=120)
 
-Prompt:
-{full_prompt}
-"""
         st.download_button(" Télécharger le résumé (.txt)", summary.encode("utf-8"), "image_to_video_summary.txt")
     else:
         st.info("🖼️ Veuillez uploader une image.")
