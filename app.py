@@ -157,7 +157,7 @@ FX: {prompt}
 Camera: {camera}
 Style: {style}
 Inspiration: {inspiration}
-Platform: {platform} – {desc}
+Platform: {platform} - {desc}
 
 
 import streamlit as st
@@ -317,7 +317,7 @@ FX: {prompt}
 Camera: {camera}
 Style: {style}
 Inspiration: {inspiration}
-Platform: {platform} – {desc}
+Platform: {platform} - {desc}
 
 Prompt:
 {full_prompt}
