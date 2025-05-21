@@ -72,7 +72,7 @@ if image_mode:
     moteur = st.selectbox("🎥 Moteur IA cible :", list(platforms.keys()))
 
     if uploaded_image:
-        st.image(uploaded_image, caption="Image source pour animation", use_column_width=True)
+        st.image(uploaded_image, caption="Image source pour animation", use_container_width=True)
         st.markdown("### 🎞️ Prompt d'animation proposé :")
         st.code(f"Prompt : {motion_prompt}\nStyle : {style}\nMoteur : {moteur}")
 
