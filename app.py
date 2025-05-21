@@ -6,7 +6,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from io import BytesIO
 
-# Données
+# Données FX et suggestions
 combo_fx = {
     "explosion": "a giant explosion shattering the ground",
     "portal": "a glowing magical portal opening in the sky",
@@ -17,7 +17,6 @@ combo_fx = {
     "disintegration": "everything slowly disintegrating into particles"
 }
 
-# Suggestions intelligentes de combos
 combo_suggestions = {
     "explosion": ["collapse", "disintegration"],
     "portal": ["storm", "transformation"],
@@ -56,12 +55,11 @@ platforms = {
     "Kling 1.6": "ultra-realistic rendering with advanced camera tracking and physical lighting simulation"
 }
 
-st.set_page_config(page_title="🎬 FX Prompt Timeline Generator", layout="wide")
-st.title("🎬 Générateur de Timeline d’Effets Spéciaux Vidéo IA")
+st.set_page_config(page_title="🎬 FX Timeline Generator", layout="wide")
+st.title("🎬 Générateur d'Effets Vidéo IA — FX Timeline + Image-to-Video")
 
-# Options dans la sidebar
 num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
-use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions intelligentes de FX", value=False)
+use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions FX intelligentes", value=False)
 
 timeline = []
 
@@ -92,6 +90,16 @@ for i in range(num_scenes):
         fx_desc = " and ".join(fx_list) if fx_list else "a mysterious phenomenon occurs"
         base_prompt = f"{fx_desc} {location}, {camera}, {style} style, {inspiration}."
         timeline.append((f"Scène {i + 1}", base_prompt))
+
+        # Partie image-to-video
+        st.markdown("🎞️ **Image-to-Video (optionnel)**")
+        uploaded_image = st.file_uploader("📸 Uploade une image pour cette scène :", type=["jpg", "png"], key=f"img_{i}")
+        motion_prompt = st.text_input("🎬 Décris l'animation souhaitée à partir de l’image :", value="cinematic zoom-in with particle effects", key=f"anim_{i}")
+
+        if uploaded_image:
+            st.image(uploaded_image, caption="Image source pour animation")
+            st.markdown(f"*Suggestion de prompt animation (à copier dans Pika, Runway, Pixverse...) :*")
+            st.code(f"Prompt : {motion_prompt}\nImage : [image jointe]")
 
 # Affichage des scènes
 st.subheader("📜 Timeline des Scènes Générées")
