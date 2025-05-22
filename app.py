@@ -146,6 +146,7 @@ if use_smart_combo:
     if fx2 != "Aucun" and fx2 in combo_fx:
         fx_list.append(combo_fx[fx2])
 
+
 def create_pdf(timeline):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
@@ -153,7 +154,7 @@ def create_pdf(timeline):
     y = height - 40
 
     c.setFont("Helvetica-Bold", 16)
-    c.drawString(40, y, "🎬 Timeline des Prompts FX")
+    c.drawString(40, y, "🎬 FX Video Prompt Timeline")
     y -= 30
 
     for scene_title, base_prompt in timeline:
@@ -165,7 +166,7 @@ def create_pdf(timeline):
         c.drawString(40, y, scene_title)
         y -= 20
         c.setFont("Helvetica", 12)
-        c.drawString(40, y, "Prompt principal :")
+        c.drawString(40, y, "Main prompt:")
         y -= 16
         for line in split_text(base_prompt, 90):
             c.drawString(50, y, line)
