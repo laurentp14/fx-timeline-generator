@@ -6,13 +6,13 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 combo_fx = {
-    "explosion": "une explosion géante brise le sol",
-    "portal": "un portail magique s’ouvre dans le ciel",
-    "storm": "une tempête surnaturelle déchire l’air",
-    "transformation": "une personne se transforme en lumière pure",
-    "collapse": "la ville s’effondre comme un vortex",
-    "lava": "la lave surgit rapidement de la terre",
-    "disintegration": "tout se désintègre lentement en particules"
+    "explosion": "a giant explosion shatters the ground",
+    "portal": "a magical portal opens in the sky",
+    "storm": "a supernatural storm tears the air",
+    "transformation": "a person transforms into pure light",
+    "collapse": "the city collapses like a vortex",
+    "lava": "lava rapidly rises from the earth",
+    "disintegration": "everything slowly disintegrates into particles"
 }
 
 combo_suggestions = {
@@ -26,31 +26,32 @@ combo_suggestions = {
 }
 
 locations = [
-    "dans un château médiéval", "sur une île flottante", "dans une ville cyberpunk",
-    "au cœur d’une forêt ancienne", "dans une cité sous-marine"
+    "in a medieval castle", "on a floating island", "in a cyberpunk city",
+    "in an ancient forest", "in an underwater city"
 ]
 
-styles = ["cinématographique", "onirique", "hyper-réaliste", "animé stylisé", "sci-fi sombre"]
+styles = ["cinematic", "dreamlike", "hyper-realistic", "stylized anime", "dark sci-fi"]
 
 camera_moves = [
-    "avec un plan drone circulaire", "en dolly zoom au ralenti",
-    "avec une caméra tremblante", "en panoramique fluide"
+    "with a drone shot circling the scene", "with a slow-motion dolly zoom",
+    "with a handheld shaking camera", "in a smooth panoramic shot"
 ]
 
 inspirations = [
-    "comme dans Inception", "inspiré de Blade Runner 2049",
-    "dans l’ambiance d’Interstellar", "comme un final de Marvel",
-    "rappelant The Witcher"
+    "like in Inception", "inspired by Blade Runner 2049",
+    "with the atmosphere of Interstellar", "like a Marvel final battle",
+    "reminiscent of The Witcher"
 ]
 
+
 platform_styles = {
-    "LumaLabs": lambda p: f"Scène réaliste et cinématographique : {p}. Lumière forte et mouvements dynamiques.",
-    "Runway": lambda p: f"Scène ultra détaillée : {p}. Transitions douces et textures naturelles.",
-    "Minimax": lambda p: f"Animation stylisée : {p}. Transitions fluides, ambiance expressive.",
-    "Pika": lambda p: f"Effets visuels percutants : {p}. Action rapide et VFX tranchants.",
-    "Vidu Q1": lambda p: f"Narration fluide : {p}. Caméra en mouvement et transitions riches.",
-    "Pixverse 4.5": lambda p: f"Style animé et coloré : {p}. Rythme rapide et effets dynamiques.",
-    "Kling 1.6": lambda p: f"Ultra-réalisme : {p}. Suivi caméra avancé et lumière physique."
+    "LumaLabs": lambda p: f"A realistic cinematic view of {p}, with dramatic lighting and dynamic camera movements.",
+    "Runway": lambda p: f"Hyper-detailed and naturalistic rendering of {p}, with soft transitions and organic textures.",
+    "Minimax": lambda p: f"Stylized animation showing {p}, featuring fluid transitions and strong emotional atmosphere.",
+    "Pika": lambda p: f"High-impact VFX of {p}, with sharp effects and fast-paced camera action.",
+    "Vidu Q1": lambda p: f"Cinematic storytelling shot of {p}, with smooth camera motion and rich visual transitions.",
+    "Pixverse 4.5": lambda p: f"Animated and colorful depiction of {p}, full of energetic motion effects.",
+    "Kling 1.6": lambda p: f"Ultra-realistic capture of {p}, with physical light simulation and advanced camera tracking."
 }
 
 st.set_page_config(page_title="🎬 Générateur de Timeline FX", layout="wide")
@@ -83,18 +84,18 @@ for i in range(num_scenes):
                 selected = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()), key=f"fx_{i}")
                 fx_list = [combo_fx[k] for k in selected if k in combo_fx]
 
-            location = st.selectbox("Lieu", ["Choisir..."] + locations, key=f"location_{i}")
+            location = st.selectbox("Lieu", ["Choose..."] + locations, key=f"location_{i}")
 
         with col2:
-            camera = st.selectbox("Mouvement caméra", ["Choisir..."] + camera_moves, key=f"camera_{i}")
-            style = st.selectbox("Style visuel", ["Choisir..."] + styles, key=f"style_{i}")
-            inspiration = st.selectbox("Référence cinéma", ["Choisir..."] + inspirations, key=f"inspiration_{i}")
+            camera = st.selectbox("Mouvement caméra", ["Choose..."] + camera_moves, key=f"camera_{i}")
+            style = st.selectbox("Style visuel", ["Choose..."] + styles, key=f"style_{i}")
+            inspiration = st.selectbox("Référence cinéma", ["Choose..."] + inspirations, key=f"inspiration_{i}")
 
         fx_desc = " et ".join(fx_list) if fx_list else "un phénomène mystérieux se produit"
-        location_txt = location if location != "Choisir..." else ""
-        camera_txt = camera if camera != "Choisir..." else ""
-        style_txt = style if style != "Choisir..." else ""
-        inspiration_txt = inspiration if inspiration != "Choisir..." else ""
+        location_txt = location if location != "Choose..." else ""
+        camera_txt = camera if camera != "Choose..." else ""
+        style_txt = style if style != "Choose..." else ""
+        inspiration_txt = inspiration if inspiration != "Choose..." else ""
 
         base_prompt = f"{fx_desc} {location_txt}, {camera_txt}, style {style_txt}, {inspiration_txt}".strip(" ,.")
         timeline.append((f"Scène {i + 1}", base_prompt))
@@ -104,11 +105,9 @@ for scene_title, base_prompt in timeline:
     st.markdown(f"## 🎬 {scene_title}")
     st.code(base_prompt)
     for platform, modifier in platform_styles.items():
-        full_prompt_fr = modifier(base_prompt)
-        full_prompt_en = base_prompt.replace("une ", "a ").replace("un ", "a ").replace("dans ", "in ").replace("avec ", "with ").replace("style ", "with ").replace("comme ", "like ").replace("s’ouvre", "opens").replace("brise", "shatters").replace("déchire", "tears").replace("se transforme", "transforms").replace("s’effondre", "collapses").replace("surgit", "rises").replace("se désintègre", "disintegrates")
+        full_prompt_en = modifier(base_prompt)
         st.markdown(f"**🔹 {platform}**")
         st.code(full_prompt_en)
-        st.code(full_prompt_fr)
 
 def split_text(text, max_length):
     words = text.split()
