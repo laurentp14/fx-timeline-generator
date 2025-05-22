@@ -105,7 +105,7 @@ for scene_title, base_prompt in timeline:
     st.code(base_prompt)
     for platform, modifier in platform_styles.items():
         full_prompt_fr = modifier(base_prompt)
-        full_prompt_en = f"{platform} style: " + base_prompt.replace("une ", "a ").replace("un ", "a ").replace("dans ", "in ").replace("avec ", "with ").replace("style ", "with ").replace("comme ", "like ").replace("s’ouvre", "opens").replace("brise", "shatters").replace("déchire", "tears").replace("se transforme", "transforms").replace("s’effondre", "collapses").replace("surgit", "rises").replace("se désintègre", "disintegrates")
+        full_prompt_en = base_prompt.replace("une ", "a ").replace("un ", "a ").replace("dans ", "in ").replace("avec ", "with ").replace("style ", "with ").replace("comme ", "like ").replace("s’ouvre", "opens").replace("brise", "shatters").replace("déchire", "tears").replace("se transforme", "transforms").replace("s’effondre", "collapses").replace("surgit", "rises").replace("se désintègre", "disintegrates")
         st.markdown(f"**🔹 {platform}**")
         st.code(full_prompt_en)
         st.code(full_prompt_fr)
