@@ -56,7 +56,7 @@ platform_styles = {
 st.set_page_config(page_title="🎬 Générateur de Timeline FX", layout="wide")
 st.title("🎬 Générateur de Timeline d’Effets Spéciaux Vidéo IA")
 
-num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 3)
+num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 1)
 use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions intelligentes de FX", value=False)
 allow_manual_fx = st.sidebar.checkbox("➕ Ajouter des effets manuels", value=True)
 
