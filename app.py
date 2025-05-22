@@ -189,6 +189,7 @@ def create_pdf(timeline):
     c.save()
     buffer.seek(0)
     return buffer
+
 if st.button("📄 Exporter la timeline en PDF"):
     pdf_file = create_pdf(timeline)
     st.download_button(
