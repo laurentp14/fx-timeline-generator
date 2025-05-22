@@ -75,7 +75,7 @@ if use_smart_combo:
     fx_list.append(combo_fx[fx1])
     if fx2 != "Aucun" and fx2 in combo_fx:
         fx_list.append(combo_fx[fx2])
-            else:
+        else:
             lines.append(line.strip())
             line = word + " "
     if line:
