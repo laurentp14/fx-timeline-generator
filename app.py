@@ -68,7 +68,7 @@ for i in range(num_scenes):
         col1, col2 = st.columns(2)
         with col1:
             fx_list = []
-            
+
 if use_smart_combo:
     fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
     suggested = combo_suggestions.get(fx1, [])
