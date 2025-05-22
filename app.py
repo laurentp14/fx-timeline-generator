@@ -68,19 +68,21 @@ for i in range(num_scenes):
         col1, col2 = st.columns(2)
         with col1:
             fx_list = []
-            if use_smart_combo:
-                fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
-                suggested = combo_suggestions.get(fx1, [])
-                fx2 = st.selectbox("Effet complémentaire suggéré", ["Aucun"] + suggested, key=f"fx2_{i}")
-                fx_list.append(combo_fx[fx1])
-                if fx2 != "Aucun" and fx2 in combo_fx:
-                    fx_list.append(combo_fx[fx2])
-                if allow_manual_fx:
-                    extras = st.multiselect("Effets supplémentaires", list(combo_fx.keys()), key=f"fx_extra_{i}")
-                    for ex in extras:
-                        if ex != fx1 and ex != fx2 and ex in combo_fx:
-                            fx_list.append(combo_fx[ex])
-            else:
+            
+if use_smart_combo:
+    fx1 = st.selectbox(f"Effet principal (scène {i + 1})", list(combo_fx.keys()), key=f"fx1_{i}")
+    suggested = combo_suggestions.get(fx1, [])
+    fx2 = st.selectbox("Effet complémentaire suggéré", ["Aucun"] + suggested, key=f"fx2_{i}")
+    fx_list.append(combo_fx[fx1])
+    if fx2 != "Aucun" and fx2 in combo_fx:
+        fx_list.append(combo_fx[fx2])
+    if allow_manual_fx:
+        extras = st.multiselect("Effets supplémentaires", [k for k in combo_fx if k != fx1 and k != fx2], key=f"fx_extra_{i}")
+        for ex in extras:
+            if ex in combo_fx and combo_fx[ex] not in fx_list:
+                fx_list.append(combo_fx[ex])
+else:
+
                 selected = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()), key=f"fx_{i}")
                 fx_list = [combo_fx[k] for k in selected if k in combo_fx]
 
