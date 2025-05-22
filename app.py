@@ -59,7 +59,6 @@ st.title("🎬 Générateur de Timeline d’Effets Spéciaux Vidéo IA")
 
 num_scenes = st.sidebar.slider("📽️ Nombre de scènes", 1, 5, 1)
 use_smart_combo = st.sidebar.checkbox("🧠 Activer les suggestions intelligentes de FX", value=False)
-allow_manual_fx = st.sidebar.checkbox("➕ Ajouter des effets manuels", value=True)
 
 timeline = []
 
@@ -76,48 +75,7 @@ if use_smart_combo:
     fx_list.append(combo_fx[fx1])
     if fx2 != "Aucun" and fx2 in combo_fx:
         fx_list.append(combo_fx[fx2])
-    if allow_manual_fx:
-        extras = st.multiselect("Effets supplémentaires", [k for k in combo_fx if k != fx1 and k != fx2], key=f"fx_extra_{i}")
-        for ex in extras:
-            if ex in combo_fx and combo_fx[ex] not in fx_list:
-                fx_list.append(combo_fx[ex])
-else:
-
-                selected = st.multiselect(f"Effets spéciaux (scène {i + 1})", list(combo_fx.keys()), key=f"fx_{i}")
-                fx_list = [combo_fx[k] for k in selected if k in combo_fx]
-
-            location = st.selectbox("Lieu", ["Choose..."] + locations, key=f"location_{i}")
-
-        with col2:
-            camera = st.selectbox("Mouvement caméra", ["Choose..."] + camera_moves, key=f"camera_{i}")
-            style = st.selectbox("Style visuel", ["Choose..."] + styles, key=f"style_{i}")
-            inspiration = st.selectbox("Référence cinéma", ["Choose..."] + inspirations, key=f"inspiration_{i}")
-
-        fx_desc = " et ".join(fx_list) if fx_list else "un phénomène mystérieux se produit"
-        location_txt = location if location != "Choose..." else ""
-        camera_txt = camera if camera != "Choose..." else ""
-        style_txt = style if style != "Choose..." else ""
-        inspiration_txt = inspiration if inspiration != "Choose..." else ""
-
-        base_prompt = f"{fx_desc} {location_txt}, {camera_txt}, style {style_txt}, {inspiration_txt}".strip(" ,.")
-        timeline.append((f"Scène {i + 1}", base_prompt))
-
-st.subheader("📜 Timeline des Scènes Générées")
-for scene_title, base_prompt in timeline:
-    st.markdown(f"## 🎬 {scene_title}")
-    st.code(base_prompt)
-    for platform, modifier in platform_styles.items():
-        full_prompt_en = modifier(base_prompt)
-        st.markdown(f"**🔹 {platform}**")
-        st.code(full_prompt_en)
-
-def split_text(text, max_length):
-    words = text.split()
-    lines, line = [], ""
-    for word in words:
-        if len(line) + len(word) + 1 <= max_length:
-            line += word + " "
-        else:
+            else:
             lines.append(line.strip())
             line = word + " "
     if line:
