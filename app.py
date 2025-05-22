@@ -147,61 +147,6 @@ if use_smart_combo:
         fx_list.append(combo_fx[fx2])
 
 
-def create_pdf(timeline):
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    y = height - 40
-
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(40, y, "🎬 FX Video Prompt Timeline")
-    y -= 30
-
-    for scene_title, base_prompt in timeline:
-        if y < 140:
-            c.showPage()
-            y = height - 40
-            c.setFont("Helvetica-Bold", 14)
-
-        c.drawString(40, y, scene_title)
-        y -= 20
-        c.setFont("Helvetica", 12)
-        c.drawString(40, y, "Main prompt:")
-        y -= 16
-        for line in split_text(base_prompt, 90):
-            c.drawString(50, y, line)
-            y -= 14
-
-        for platform, modifier in platform_styles.items():
-            full_prompt = modifier(base_prompt)
-            y -= 10
-            if y < 100:
-                c.showPage()
-                y = height - 40
-            c.setFont("Helvetica-Bold", 12)
-            c.drawString(40, y, platform)
-            y -= 16
-            c.setFont("Helvetica", 11)
-            for line in split_text(full_prompt, 90):
-                c.drawString(50, y, line)
-                y -= 14
-            y -= 6
-
-    c.save()
-    buffer.seek(0)
-    return buffer
-
-if st.button("📄 Exporter la timeline en PDF"):
-    pdf_file = create_pdf(timeline)
-    st.download_button(
-        label="📥 Télécharger le PDF",
-        data=pdf_file,
-        file_name="fx_timeline.pdf",
-        mime="application/pdf"
-    )
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    y = height - 40
 
     c.setFont("Helvetica-Bold", 16)
     c.drawString(40, y, "🎬 Timeline des Prompts FX")
@@ -240,12 +185,3 @@ if st.button("📄 Exporter la timeline en PDF"):
     c.save()
     buffer.seek(0)
     return buffer
-
-if st.button("📄 Exporter la timeline en PDF"):
-    pdf_file = create_pdf(timeline)
-    st.download_button(
-        label="📥 Télécharger le PDF",
-        data=pdf_file,
-        file_name="fx_timeline.pdf",
-        mime="application/pdf"
-    )
