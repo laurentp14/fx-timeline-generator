@@ -122,7 +122,9 @@ for i in range(num_scenes):
 
         with col2:
             platform = st.selectbox(f"Plateforme IA", list(platforms.keys()), index=0, key=f"plat_{i}")
-            camera = st.selectbox(f"Mouvement caméra", camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves), index=random.randint(0, len(camera_moves)-1), key=f"camera_{i}")
+            current_list = camera_moves if camera_all_toggle else camera_moves_by_platform.get(platform, camera_moves)
+            index_choice = random.randint(0, len(current_list)-1) if len(current_list) > 0 else 0
+            camera = st.selectbox("Mouvement caméra", current_list, index=index_choice, key=f"camera_{i}")
             style = st.selectbox(f"Style visuel", styles, index=random.randint(0, len(styles)-1), key=f"style_{i}")
             inspiration = st.selectbox(f"Référence cinéma", inspirations, index=random.randint(0, len(inspirations)-1), key=f"inspiration_{i}")
 
